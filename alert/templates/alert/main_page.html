@@ -1,0 +1,85 @@
+{% extends "alert/base.html" %}
+
+{% block title %}
+    Главная страница
+{% endblock %}
+
+{% block content %}
+
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th>ID устройства</th>
+                <th>Тип устройства</th>
+                <th>Адресс устройства</th>
+                <th>Устройство активно</th>
+                <th>Запуск устройства</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in table %}
+                <tr>
+                    <td><a class="nav-link" href="{% url 'SomeDevice' i.id %}">{{ i.id }}</a></td>
+                    <td>{{ i.type }}</td>
+                    <td>{{ i.address }}</td>
+
+                    {% if i.activity %}
+                        <td class="table-danger"><strong>Устройство включено</strong></td>
+                    {% else %}
+                        <td>Устройство выключено</td>
+                    {% endif %}
+
+                    <form action="{% url 'MainPage' %}" method="post">{% csrf_token %}
+                    {% if i.activity %}
+                    <td>
+                        <input type="submit" value="Выключить" class="btn btn-primary">
+                        <input type="hidden" name="device_id" value="{{ i.id }}">
+                    </td>
+                    {% else %}
+                    <td>
+                        <input type="submit" value="Включить" class="btn btn-danger">
+                        <input type="hidden" name="device_id" value="{{ i.id }}">
+                    </td>
+                    {% endif %}
+                    </form>
+                </tr>
+        </tbody>
+        {% endfor %}
+    </table>
+
+    <p>{% if is_paginated %}
+        <nav aria-label="...">
+            <ul class="pagination">
+                {% for n in table.paginator.page_range %}
+                    {% if table.number == n %}
+                        <li class="page-item active" aria-current="page">
+                            <a class="page-link" href="?page={{ n }}">{{ n }}<span
+                            class="sr-only">(current)</span></a>
+                        </li>
+                    {% elif n > table.number|add:-3 and n < table.number|add:3 %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ n }}">{{ n }}</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </nav>
+        {% endif %}</p>
+
+{% endblock %}
+
+{% block right %}
+
+    <form action="{% url 'MainPage' %}" method="post">{% csrf_token %}
+        <input type="submit" value="Включить все устройства" class="btn btn-danger">
+        <input type="hidden" name="start" value="{{ True }}">
+    </form>
+
+    <p>
+    <form action="{% url 'MainPage' %}" method="post">{% csrf_token %}
+        <input type="submit" value="Выключить все устройства" class="btn btn-primary">
+        <input type="hidden" name="start" value="{{ False }}">
+    </form>
+    </p>
+
+{% endblock %}
