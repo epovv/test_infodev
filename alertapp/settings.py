@@ -81,14 +81,21 @@ WSGI_APPLICATION = 'alertapp.wsgi.application'
 #     }
 # }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'plzceqns',
+#         'USER': 'plzceqns',
+#         'PASSWORD': 'l1yQbSLWw3UbkTLsVuKWJ6P4FJVEqLJX',
+#         'HOST': 'rogue.db.elephantsql.com',
+#         'PORT': '5432',
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'plzceqns',
-        'USER': 'plzceqns',
-        'PASSWORD': 'l1yQbSLWw3UbkTLsVuKWJ6P4FJVEqLJX',
-        'HOST': 'rogue.db.elephantsql.com',
-        'PORT': '5432',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
